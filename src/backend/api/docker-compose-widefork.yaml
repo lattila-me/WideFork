@@ -1,0 +1,41 @@
+name: widefork
+
+services:
+
+  widefork-restapi:
+      container_name: widefork_restapi
+      build:
+        context: ./
+        dockerfile: ./Dockerfile
+      ## image: widefork/restapi_py:latest
+      depends_on:
+        - widefork-mariadb
+      restart: unless-stopped    
+      networks:      
+        - widefork  
+      links:
+        - widefork-mariadb
+      ports:
+        - 3510:3500/tcp
+
+  widefork-mariadb:  
+      container_name: widefork-mariadb
+      image: mariadb:latest
+      environment:
+        - MARIADB_ROOT_PASSWORD=admin
+        - MARIADB_DATABASE=widefork
+        - MARIADB_AUTO_UPGRADE=1
+      volumes:
+        - mariadb:/var/lib/mysql:rw
+      restart: unless-stopped
+      networks:
+        - widefork
+      ports:
+        - 3310:3306/tcp
+
+volumes:
+  mariadb:
+
+networks:
+  widefork:
+    driver: bridge

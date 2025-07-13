@@ -1,0 +1,18 @@
+{
+    "version": "2.0.0",
+    "tasks": [        
+        {
+            "label": "1. Build Docker Compose service",
+            "command": "echo Build-process-begun;cd src/backend/api;docker compose -f docker-compose-widefork.yaml up -d --build;",            
+            "type": "shell",
+            "args": [],
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "presentation": {
+                "reveal": "always"
+            },
+            "group": "build"
+        }
+    ]
+}

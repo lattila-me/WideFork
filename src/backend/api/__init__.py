@@ -1,0 +1,3 @@
+"""
+    WideFork REST API module
+"""
