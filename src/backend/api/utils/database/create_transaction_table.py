@@ -101,8 +101,11 @@ async def createTransactionTable(config: configmodel.ConfigModel, table: model_t
 
         cur.execute(SQL_COMMAND)
 
+        message = f"Table created. Table name: {table_name}"
+
         return {
-            "result": False,             
+            "result": True,
+            "message": message,          
             "json": JSONResponse(
                 status_code=201,
                 content= (
@@ -110,7 +113,7 @@ async def createTransactionTable(config: configmodel.ConfigModel, table: model_t
                     datetime=str(datetime.now()),
                     module=UTIL_NAME,
                     type=model_response.ResponseType.ok,
-                    message=f"Table created. Table name: {table_name}"                    
+                    message=message                    
                     ).model_dump()
                 )          
             )                        
@@ -123,7 +126,8 @@ async def createTransactionTable(config: configmodel.ConfigModel, table: model_t
         if (conn is not None) and (conn): cur.execute("ROLLBACK")
 
         return {
-            "result": False,             
+            "result": False,
+            "message": e_mariadb,            
             "json": JSONResponse(
                 status_code=500,
                 content= (
@@ -142,7 +146,8 @@ async def createTransactionTable(config: configmodel.ConfigModel, table: model_t
         print(f"[ERROR] An error has occured - Process: [{UTIL_NAME}] | Error: {e}")
 
         return {
-            "result": False, 
+            "result": False,
+            "message": e, 
             "json": JSONResponse(
                 status_code=500,
                 content= (

@@ -22,6 +22,6 @@ class ModelTransactionTable(BaseModel):
     table_name: str = Field(description="The name of the table", max_length=100)
     table_type: TransactionTableType = Field(description="Type of the table")
 
-class ModelMaterDataTable(BaseModel):
+class ModelMasterDataTable(BaseModel):
     table_name: str = Field(description="The name of the table", max_length=100)
     table_type: MaterDataTableType = Field(description="Type of the table")

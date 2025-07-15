@@ -13,66 +13,27 @@ importlib.reload(model_table)
 importlib.reload(model_response)
 
 
-async def createMasterDataTable(config: configmodel.ConfigModel, table: model_table.ModelMasterDataTable):
+async def addUser(config: configmodel.ConfigModel, table_name: str, username: str, email: str = "", role: str = "V"):
     """
-        Creates a WideFork master data table (users, api_keys, mapping etc.).
+        Adds a user to the given User table.
 
         Parameters:
             -- config(object): the config object to be used
-            -- table(object): the table model to be used
+            -- table(str): the name of the user table
+            -- username(str): the user's name to be added
+            -- email(str): the email of the user
+            -- role(str): the role of the user (A, V)
 
         Returns:
             -- response(dictionary): a response dictionary with a bool response or with a JSON response object
     """
 
-    UTIL_NAME = "Create Mastertable"
-
-    table_type = table.table_type.name
-    table_name = f"{table_type}_{table.table_name}"
+    UTIL_NAME = "Add user"
     
-    SQL_USERS = f"""        
-        CREATE TABLE {config.db_database}.{table_name} (
-            -- Input fields                        
-            Username VARCHAR(255) NOT NULL UNIQUE COMMENT "The user's name",
-            Email VARCHAR(255) COMMENT "The user's email",
-            Role VARCHAR(1) COMMENT "User's role: (A)dmin, (V)iewer",
-            -- Constrains
-            primary key(Username)
-        ) COMMENT = "A table for keeping track of users";
+    SQL_ADD_USER = f"""
+        INSERT INTO {config.db_database}.{table_name}
+        VALUES ({username}, {email}, {role});
     """
-
-    SQL_ENTITIES = f"""        
-        CREATE TABLE {config.db_database}.{table_name} (
-            -- Input fields                        
-            Entity_code VARCHAR(255) NOT NULL UNIQUE COMMENT "Reporting entity's code",
-            Entity_name VARCHAR(255) NOT NULL UNIQUE COMMENT "Reporting entity's code",
-            Country VARCHAR(100) COMMENT "The country of origin/official seat",
-            City VARCHAR(100) COMMENT "City address",
-            Street VARCHAR(255) COMMENT "Street address",
-            Zip VARCHAR(100) COMMENT "Zip code",
-            Tax_number VARCHAR(100) COMMENT "Tax number of the reporting entity",            
-            Comment LONGTEXT COMMENT "Comments for the reporting entity",
-            -- Constrains
-            primary key(Entity_code)
-        ) COMMENT = "A table for keeping track of reporting entities.";
-    """
-
-    SQL_API_KEYS = f"""        
-        CREATE TABLE {config.db_database}.{table_name} (
-            -- Input fields                        
-            Entity_code VARCHAR(255) NOT NULL COMMENT "Reporting entity's code",
-            Api_key VARCHAR(20) NOT NULL UNIQUE COMMENT "API key",
-            Valid BOOL COMMENT "Whether the API key is valid or not"            
-        ) COMMENT = "A table for keeping track of API keys.";
-    """
-
-    # Select the appropriate SQL command
-    if (table_type == "users"):
-        SQL_COMMAND = SQL_USERS
-    elif (table_type == "entities"):
-        SQL_COMMAND = SQL_ENTITIES
-    elif (table_type == "api_keys"):
-        SQL_COMMAND = SQL_API_KEYS
 
     # Database connection defaults to None
     conn = None
@@ -88,9 +49,9 @@ async def createMasterDataTable(config: configmodel.ConfigModel, table: model_ta
         
         cur = conn.cursor()
 
-        cur.execute(SQL_COMMAND)
+        cur.execute(SQL_ADD_USER)
 
-        message = f"Table created. Table name: {table_name}"
+        message = f"User added. Table name: {table_name}, User name: {username}"
 
         return {
             "result": True,
