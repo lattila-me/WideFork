@@ -8,6 +8,8 @@ from fastapi.responses import JSONResponse
 from config import configmodel
 from postmodels import model_table
 from responsemodels import model_response
+from backend.api.utils.database import execute_sql
+
 importlib.reload(configmodel)
 importlib.reload(model_table)
 importlib.reload(model_response)
@@ -85,84 +87,11 @@ async def createTransactionTable(config: configmodel.ConfigModel, table: model_t
     elif (table_type == "tax"):
         SQL_COMMAND = SQL_TAX
 
-    # Database connection defaults to None
-    conn = None
+    res = await execute_sql.ExecuteSQLCommand(
+        config=config,
+        util=UTIL_NAME,
+        table=table_name,
+        sql_command=SQL_COMMAND
+    )
 
-    try:
-        conn = mariadb.connect(
-            host=config.db_host,
-            port=config.db_port,            
-            database=config.db_database,
-            user=config.db_user,
-            password=config.db_pw        
-        )
-        
-        cur = conn.cursor()
-
-        cur.execute(SQL_COMMAND)
-
-        conn.commit()
-
-        message = f"Table created. Table name: {table_name}"
-
-        return {
-            "result": True,
-            "message": message,          
-            "json": JSONResponse(
-                status_code=201,
-                content= (
-                    model_response.ModelResponse(
-                    datetime=str(datetime.now()),
-                    module=UTIL_NAME,
-                    type=model_response.ResponseType.ok,
-                    message=message                    
-                    ).model_dump()
-                )          
-            )                        
-        }        
-    
-    except mariadb.Error as e_mariadb:
-        print(f"[ERROR] A MariaDB error has occured - Process: [{UTIL_NAME}] | Error: {e_mariadb}")        
-
-        # Rollback any changes
-        if (conn is not None) and (conn): cur.execute("ROLLBACK")
-
-        return {
-            "result": False,
-            "message": e_mariadb,            
-            "json": JSONResponse(
-                status_code=500,
-                content= (
-                    model_response.ModelResponse(
-                    datetime=str(datetime.now()),
-                    module=UTIL_NAME,
-                    type=model_response.ResponseType.mariadb_error,
-                    message=f"An error has occured. Table name: {table_name}",
-                    error=str(e_mariadb)
-                    ).model_dump()
-                )          
-            )                        
-        }        
-
-    except Exception as e:        
-        print(f"[ERROR] An error has occured - Process: [{UTIL_NAME}] | Error: {e}")
-
-        return {
-            "result": False,
-            "message": e, 
-            "json": JSONResponse(
-                status_code=500,
-                content= (
-                    model_response.ModelResponse(
-                    datetime=str(datetime.now()),
-                    module=UTIL_NAME,
-                    type=model_response.ResponseType.general_exception,
-                    message=f"An error has occured. Table name: {table_name}",
-                    error=str(e)
-                    ).model_dump()
-                )          
-            )            
-        }
-    
-    finally:
-        if (conn is not None) and (conn): conn.close()
+    return res
