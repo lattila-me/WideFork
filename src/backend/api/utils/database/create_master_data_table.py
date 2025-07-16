@@ -36,6 +36,7 @@ async def createMasterDataTable(config: configmodel.ConfigModel, table: model_ta
             Username VARCHAR(255) NOT NULL UNIQUE COMMENT "The user's name",
             Email VARCHAR(255) COMMENT "The user's email",
             Role VARCHAR(1) COMMENT "User's role: (A)dmin, (V)iewer",
+            Active BOOL COMMENT "Whether the user is active or not",
             -- Constrains
             primary key(Username)
         ) COMMENT = "A table for keeping track of users";
@@ -60,9 +61,9 @@ async def createMasterDataTable(config: configmodel.ConfigModel, table: model_ta
     SQL_API_KEYS = f"""        
         CREATE TABLE {config.db_database}.{table_name} (
             -- Input fields                        
-            Entity_code VARCHAR(255) NOT NULL COMMENT "Reporting entity's code",
+            Username VARCHAR(255) NOT NULL COMMENT "The user's name",
             Api_key VARCHAR(20) NOT NULL UNIQUE COMMENT "API key",
-            Valid BOOL COMMENT "Whether the API key is valid or not"            
+            Valid BOOL COMMENT "Whether the API key is valid or not"          
         ) COMMENT = "A table for keeping track of API keys.";
     """
 
@@ -89,6 +90,8 @@ async def createMasterDataTable(config: configmodel.ConfigModel, table: model_ta
         cur = conn.cursor()
 
         cur.execute(SQL_COMMAND)
+
+        conn.commit()
 
         message = f"Table created. Table name: {table_name}"
 

@@ -13,27 +13,20 @@ importlib.reload(model_table)
 importlib.reload(model_response)
 
 
-async def addUser(config: configmodel.ConfigModel, table_name: str, username: str, email: str = "", role: str = "V"):
+async def ExecuteSQLCommand(config: configmodel.ConfigModel, util: str, table: str, sql_command: str):
     """
-        Adds a user to the given User table.
+        Executes a pre-defined SQL command.
 
         Parameters:
             -- config(object): the config object to be used
-            -- table(str): the name of the user table
-            -- username(str): the user's name to be added
-            -- email(str): the email of the user
-            -- role(str): the role of the user (A, V)
+            -- util(str): the utility name that is calling the SQL command
+            -- table(str): the table name the SQL command refers to
+            -- sql_command(str): the SQL command to be executed            
 
         Returns:
             -- response(dictionary): a response dictionary with a bool response or with a JSON response object
-    """
-
-    UTIL_NAME = "Add user"
+    """    
     
-    SQL_ADD_USER = f"""
-        INSERT INTO {config.db_database}.{table_name}
-        VALUES ({username}, {email}, {role});
-    """
 
     # Database connection defaults to None
     conn = None
@@ -49,9 +42,11 @@ async def addUser(config: configmodel.ConfigModel, table_name: str, username: st
         
         cur = conn.cursor()
 
-        cur.execute(SQL_ADD_USER)
+        cur.execute(sql_command)
+        
+        conn.commit()
 
-        message = f"User added. Table name: {table_name}, User name: {username}"
+        message = f"SQL Command executed."
 
         return {
             "result": True,
@@ -61,7 +56,7 @@ async def addUser(config: configmodel.ConfigModel, table_name: str, username: st
                 content= (
                     model_response.ModelResponse(
                     datetime=str(datetime.now()),
-                    module=UTIL_NAME,
+                    module=util,
                     type=model_response.ResponseType.ok,
                     message=message,                    
                     ).model_dump()
@@ -70,7 +65,7 @@ async def addUser(config: configmodel.ConfigModel, table_name: str, username: st
         }        
     
     except mariadb.Error as e_mariadb:
-        print(f"[ERROR] A MariaDB error has occured - Process: [{UTIL_NAME}] | Error: {e_mariadb}")        
+        print(f"[ERROR] A MariaDB error has occured - Process: [{util}] | Error: {e_mariadb}")        
 
         # Rollback any changes
         if (conn is not None) and (conn): cur.execute("ROLLBACK")        
@@ -83,9 +78,9 @@ async def addUser(config: configmodel.ConfigModel, table_name: str, username: st
                 content= (
                     model_response.ModelResponse(
                     datetime=str(datetime.now()),
-                    module=UTIL_NAME,
+                    module=util,
                     type=model_response.ResponseType.mariadb_error,
-                    message=f"An error has occured during cration of a table: {table_name}",
+                    message=f"An error has occured during SQL exectuion in table: {table}",
                     error=str(e_mariadb)
                     ).model_dump()
                 )          
@@ -93,7 +88,7 @@ async def addUser(config: configmodel.ConfigModel, table_name: str, username: st
         }        
 
     except Exception as e:        
-        print(f"[ERROR] An error has occured - Process: [{UTIL_NAME}] | Error: {e}")        
+        print(f"[ERROR] An error has occured - Process: [{util}] | Error: {e}")        
 
         return {
             "result": False, 
@@ -103,9 +98,9 @@ async def addUser(config: configmodel.ConfigModel, table_name: str, username: st
                 content= (
                     model_response.ModelResponse(
                     datetime=str(datetime.now()),
-                    module=UTIL_NAME,
+                    module=util,
                     type=model_response.ResponseType.general_exception,
-                    message=f"An error has occured during cration of a table: {table_name}",
+                    message=f"An error has occured during cration of a table: {table}",
                     error=str(e)
                     ).model_dump()
                 )          

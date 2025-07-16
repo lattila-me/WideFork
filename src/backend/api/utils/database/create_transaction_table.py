@@ -101,6 +101,8 @@ async def createTransactionTable(config: configmodel.ConfigModel, table: model_t
 
         cur.execute(SQL_COMMAND)
 
+        conn.commit()
+
         message = f"Table created. Table name: {table_name}"
 
         return {
