@@ -16,7 +16,7 @@ importlib.reload(model_response)
 importlib.reload(execute_sql)
 
 
-async def AddUser(config: configmodel.ConfigModel, table_name: str, username: str, email: str = "", role: str = "V"):
+async def addUser(config: configmodel.ConfigModel, table_name: str, username: str, email: str = "", role: str = "V"):
     """
         Adds a user to the given User table.
 
@@ -37,7 +37,7 @@ async def AddUser(config: configmodel.ConfigModel, table_name: str, username: st
     
     SQL_ADD_USER = f"""
         INSERT INTO {config.db_database}.{table_name}
-        VALUES ("{username}", "{email}", 1, "{role}");
+        VALUES ("{username}", "{email}", "{role}", 1);
     """   
 
     res = await execute_sql.ExecuteSQLCommand(

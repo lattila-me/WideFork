@@ -38,6 +38,7 @@ async def addAPIKey(config: configmodel.ConfigModel, table_name: str, username: 
 
     now = str(datetime.now())
     api_key = hashlib.md5(str(secrets.token_hex(10) + now).encode())
+    api_key = api_key.hexdigest()
     
     SQL_ADD_API_KEY = f"""
         INSERT INTO {config.db_database}.{table_name}

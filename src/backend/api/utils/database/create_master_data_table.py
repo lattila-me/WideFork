@@ -65,7 +65,7 @@ async def createMasterDataTable(config: configmodel.ConfigModel, table: model_ta
         CREATE TABLE {config.db_database}.{table_name} (
             -- Input fields                        
             Username VARCHAR(255) NOT NULL COMMENT "The user's name",
-            Api_key VARCHAR(20) NOT NULL UNIQUE COMMENT "API key",
+            Api_key VARCHAR(32) NOT NULL UNIQUE COMMENT "API key",
             Valid BOOL COMMENT "Whether the API key is valid or not"          
         ) COMMENT = "A table for keeping track of API keys.";
     """
