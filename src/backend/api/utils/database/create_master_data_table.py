@@ -16,7 +16,7 @@ importlib.reload(model_response)
 importlib.reload(execute_sql)
 
 
-async def createMasterDataTable(config: configmodel.ConfigModel, table: model_table.ModelMasterDataTable):
+async def createMasterDataTable(config: configmodel.ConfigModel, table: model_table.ModelMasterDataTable) -> dict:
     """
         Creates a WideFork master data table (users, api_keys, mapping etc.).
 

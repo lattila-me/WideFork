@@ -15,7 +15,7 @@ importlib.reload(model_table)
 importlib.reload(model_response)
 
 
-async def createTransactionTable(config: configmodel.ConfigModel, table: model_table.ModelTransactionTable):
+async def createTransactionTable(config: configmodel.ConfigModel, table: model_table.ModelTransactionTable) -> dict:
     """
         Creates a WideFork transaction table (GL, Tax, AP, AR, Inventory).
 

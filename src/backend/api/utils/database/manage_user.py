@@ -16,7 +16,7 @@ importlib.reload(model_response)
 importlib.reload(execute_sql)
 
 
-async def addUser(config: configmodel.ConfigModel, table_name: str, username: str, email: str = "", role: str = "V"):
+async def addUser(config: configmodel.ConfigModel, table_name: str, username: str, email: str = "", role: str = "V") -> dict:
     """
         Adds a user to the given User table.
 

@@ -19,7 +19,7 @@ importlib.reload(model_response)
 importlib.reload(execute_sql)   
 
 
-async def addAPIKey(config: configmodel.ConfigModel, table_name: str, username: str):
+async def addAPIKey(config: configmodel.ConfigModel, table_name: str, username: str) -> dict:
     """
         Creates an API key for a given user.
 

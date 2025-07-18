@@ -13,7 +13,7 @@ importlib.reload(model_table)
 importlib.reload(model_response)
 
 
-async def ExecuteSQLCommand(config: configmodel.ConfigModel, util: str, table: str, sql_command: str):
+async def ExecuteSQLCommand(config: configmodel.ConfigModel, util: str, table: str, sql_command: str) -> dict:
     """
         Executes a pre-defined SQL command.
 
