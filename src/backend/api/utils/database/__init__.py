@@ -13,3 +13,4 @@ from .create_transaction_table import createTransactionTable
 from .manage_api_key import addAPIKey
 from .manage_user import addUser
 from .manage_user import deactivateUser
+from .query_data import queryData

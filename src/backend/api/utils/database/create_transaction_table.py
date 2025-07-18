@@ -39,6 +39,7 @@ async def createTransactionTable(config: configmodel.ConfigModel, table: model_t
             Due_date DATETIME COMMENT "The due date of the transaction/invoice if any",
             Partner VARCHAR(255) COMMENT "Partner name, if any",
             Description VARCHAR (255) COMMENT "A textual description of the transaction",
+            Journal VARCHAR (255) COMMENT "The code/name of the journal the transaction is booked into",
             GL_account VARCHAR(100) NOT NULL COMMENT "The GL account number/code the transacation is affected by",
             Counter_GL_account VARCHAR(100) COMMENT "The counter GL account number/code the transacation is affected by",
             VAT_code VARCHAR(100) COMMENT "VAT identification for the transaction, if any",

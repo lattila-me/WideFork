@@ -7,5 +7,6 @@ __author__ = "Lantos, Attila"
 
 print("WideFork Models imported.")
 
-from .model_response import ModelResponse
+from .model_response import ModelResponse, ResponseType
 from .model_table import MaterDataTableType, ModelMasterDataTable, ModelTransactionTable
+from .model_sql import SQLCommandType
