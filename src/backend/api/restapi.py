@@ -9,14 +9,14 @@ import importlib
 # Internal modules
 from config import configmodel
 from config import configuration
-import postmodels.model_table
-import responsemodels.model_response
+import models.model_table
+import backend.api.models.model_response
 import utils.database.create_transaction_table
 
 importlib.reload(configmodel)
 importlib.reload(configuration)
-importlib.reload(postmodels.model_table)
-importlib.reload(responsemodels.model_response)
+importlib.reload(models.model_table)
+importlib.reload(backend.api.models.model_response)
 importlib.reload(utils.database.create_transaction_table)
 
 
@@ -75,10 +75,10 @@ app.add_middleware (
 )
 async def helathCheck():
 
-    return responsemodels.model_response.ModelResponse(
+    return backend.api.models.model_response.ModelResponse(
         datetime=datetime.now(),
         module="Healthcheck",
-        type=responsemodels.model_response.ResponseType.ok,
+        type=backend.api.models.model_response.ResponseType.ok,
         message="REST API is up and running."        
     )    
 
@@ -92,7 +92,7 @@ async def helathCheck():
     tags=["Database"],
     summary="Healthcheck endpoint to verify API status",
 )
-async def createTransactionTable(config: configmodel.ConfigModel, tablemodel: postmodels.model_table.ModelTable):
+async def createTransactionTable(config: configmodel.ConfigModel, tablemodel: models.model_table.ModelTable):
 
     # If config is not provided, set to default
     if (config is None):

@@ -6,8 +6,8 @@ from fastapi.responses import JSONResponse
 
 # Internal modules
 from backend.api.config import configmodel
-from backend.api.postmodels import model_table
-from backend.api.responsemodels import model_response
+from backend.api.models import model_table
+from backend.api.models import model_response
 importlib.reload(configmodel)
 importlib.reload(model_table)
 importlib.reload(model_response)

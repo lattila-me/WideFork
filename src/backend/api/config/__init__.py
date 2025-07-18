@@ -9,4 +9,3 @@ __author__ = "Lantos, Attila"
 print ("WideFork Configuration Models imported.")
 
 from .configmodel import ConfigModel
-from .configuration import Config

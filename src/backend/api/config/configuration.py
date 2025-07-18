@@ -1,12 +1,12 @@
-from config import configmodel
+from .configmodel import ConfigModel
 
 import importlib
 
-importlib.reload(configmodel)
+importlib.reload(ConfigModel)
 
 
 # An actual configuration
-Config = configmodel.ConfigModel(
+Config = ConfigModel(
     db_host="widefork-mariadb",
     db_port=3310,
     db_user="root",
