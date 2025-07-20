@@ -41,7 +41,9 @@ async def createTransactionTable(config: configmodel.ConfigModel, table: model_t
             Description VARCHAR (255) COMMENT "A textual description of the transaction",
             Journal VARCHAR (255) COMMENT "The code/name of the journal the transaction is booked into",
             GL_account VARCHAR(100) NOT NULL COMMENT "The GL account number/code the transacation is affected by",
+            GL_account_description VARCHAR(255) COMMENT "The GL account name/description"
             Counter_GL_account VARCHAR(100) COMMENT "The counter GL account number/code the transacation is affected by",
+            Counter_GL_account_description VARCHAR(255) COMMENT "The GL account name/description",
             VAT_code VARCHAR(100) COMMENT "VAT identification for the transaction, if any",
             Currency_ISO VARCHAR(3) COMMENT "Currency ISO code. If blank, the default currency will be used",
             Credit FLOAT COMMENT "Credit value of the transaction",

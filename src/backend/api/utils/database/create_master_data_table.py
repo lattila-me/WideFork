@@ -25,7 +25,7 @@ async def createMasterDataTable(config: configmodel.ConfigModel, table: model_ta
             -- response(dictionary): a response dictionary with a bool response or with a JSON response object
     """
 
-    UTIL_NAME = "Create Mastertable"
+    UTIL_NAME = "Create Master Table"
 
     table_type = table.table_type.name
     table_name = f"{table_type}_{table.table_name}"
@@ -67,6 +67,20 @@ async def createMasterDataTable(config: configmodel.ConfigModel, table: model_ta
         ) COMMENT = "A table for keeping track of API keys.";
     """
 
+    SQL_MAPPING = f"""        
+        CREATE TABLE {config.db_database}.{table_name} (
+            -- Input fields                        
+            GL_account VARCHAR(100) NOT NULL COMMENT "The GL account number/code",
+            GL_account_description VARCHAR(255) COMMENT "The GL account name/description",
+            Tyoe VARCHAR(3) NOT NULL CHECK(TYPE = "BS" OR TYPE = "PNL" OR TYPE = "OBS") COMMENT "The GL account is mapped to: Balance Sheet, Profit and Loss account, Off Balance Sheet",
+            Subtype VARCHAR (100) COMMENT "A custom subtype like tax account, accounts receivable etc.",
+            Report_line_code VARCHAR(100) NOT NULL COMMENT "The line code of custom report",
+            Report_line_description VARCHAR(255) COMMENT "The custom report line name",
+            Partner VARCHAR(255) COMMENT "The partner name if the GL account can be connected to one",
+            To_be_consolidated BOOL COMMENT "If the GL account is part of the consolidation"
+        ) COMMENT = "A table that creates a unique mapping for GL transaction tables";
+    """
+
     # Select the appropriate SQL command
     if (table_type == "users"):
         SQL_COMMAND = SQL_USERS
@@ -74,6 +88,8 @@ async def createMasterDataTable(config: configmodel.ConfigModel, table: model_ta
         SQL_COMMAND = SQL_ENTITIES
     elif (table_type == "api_keys"):
         SQL_COMMAND = SQL_API_KEYS
+    elif (table_type == "mapping"):
+        SQL_COMMAND = SQL_MAPPING
 
     res = await execute_sql.ExecuteSQLCommand(
         config=config,
