@@ -48,8 +48,9 @@ async def addAPIKey(config: configmodel.ConfigModel, table_name: str, username: 
     res = await execute_sql.ExecuteSQLCommand(
         config=config,
         util=UTIL_NAME,
-        table=table_name,
-        sql_command=SQL_ADD_API_KEY
+        table_name=table_name,
+        sql_command=SQL_ADD_API_KEY,
+        sql_command_type="data_manipulation"
     )
 
     return res

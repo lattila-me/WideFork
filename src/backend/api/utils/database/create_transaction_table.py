@@ -90,8 +90,9 @@ async def createTransactionTable(config: configmodel.ConfigModel, table: model_t
     res = await execute_sql.ExecuteSQLCommand(
         config=config,
         util=UTIL_NAME,
-        table=table_name,
-        sql_command=SQL_COMMAND
+        table_name=table_name,
+        sql_command=SQL_COMMAND,
+        sql_command_type="data_manipulation"
     )
 
     return res

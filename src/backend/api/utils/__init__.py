@@ -14,3 +14,4 @@ from .database.manage_api_key import addAPIKey
 from .database.manage_user import addUser
 from .database.manage_user import deactivateUser
 from .database.query_data import queryData
+from .database.init_project import initProject

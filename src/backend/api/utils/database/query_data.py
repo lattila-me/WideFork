@@ -34,7 +34,7 @@ async def queryData(config: configmodel.ConfigModel, table_name: str) -> object:
     res = await execute_sql.ExecuteSQLCommand(
         config=config,
         util=UTIL_NAME,
-        table=table_name,
+        table_name=table_name,
         sql_command=SQL_COMMAND,
         sql_command_type="data_query"
     )

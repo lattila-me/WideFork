@@ -7,14 +7,15 @@ from fastapi.responses import JSONResponse
 # Internal modules
 from backend.api.config import configmodel
 import backend.api.models as models
-import backend.api.utils as utils
+from .create_master_data_table import createMasterDataTable
+from .manage_user import addUser
+from .manage_api_key import addAPIKey
 
 importlib.reload(configmodel)
 importlib.reload(models)
-importlib.reload(utils)
 
 
-async def initProjekt(config: configmodel.ConfigModel) -> dict:
+async def initProject(config: configmodel.ConfigModel) -> dict:
     """
         Initializes a WideFork starting project by creating a user, an api_key, a GL entry and a mapping table.
 
@@ -43,21 +44,21 @@ async def initProjekt(config: configmodel.ConfigModel) -> dict:
         )
 
         table_mapping = models.ModelMasterDataTable(
-            table_name = "",
+            table_name = "init",
             table_type = "Mapping table"
         )
 
-        await utils.createMasterDataTable(
+        await createMasterDataTable(
             config=config,
             table=table_users
         )
 
-        await utils.createMasterDataTable(
+        await createMasterDataTable(
             config=config,
             table=table_api_keys
         )
 
-        await utils.addUser(    
+        await addUser(    
             config=config,
             table_name="init",
             username="admin",
@@ -65,7 +66,7 @@ async def initProjekt(config: configmodel.ConfigModel) -> dict:
             role="A"
         )
 
-        await utils.addAPIKey(    
+        await addAPIKey(    
             config=config,
             table_name="init",
             username="admin"

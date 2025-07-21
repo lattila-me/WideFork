@@ -43,8 +43,9 @@ async def addUser(config: configmodel.ConfigModel, table_name: str, username: st
     res = await execute_sql.ExecuteSQLCommand(
         config=config,
         util=UTIL_NAME,
-        table=table_name,
-        sql_command=SQL_ADD_USER    
+        table_name=table_name,
+        sql_command=SQL_ADD_USER,
+        sql_command_type="data_manipulation"  
     )
 
     return res
@@ -75,8 +76,9 @@ async def deactivateUser(config: configmodel.ConfigModel, table_name: str, usern
     res = await execute_sql.ExecuteSQLCommand(
         config=config,
         util=UTIL_NAME,
-        table=table_name,
-        sql_command=SQL_DEACTIVATE_USER
+        table_name=table_name,
+        sql_command=SQL_DEACTIVATE_USER,
+        sql_command_type="data_manipulation"
     )
 
     return res

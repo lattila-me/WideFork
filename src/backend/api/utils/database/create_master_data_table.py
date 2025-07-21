@@ -77,7 +77,9 @@ async def createMasterDataTable(config: configmodel.ConfigModel, table: model_ta
             Report_line_code VARCHAR(100) NOT NULL COMMENT "The line code of custom report",
             Report_line_description VARCHAR(255) COMMENT "The custom report line name",
             Partner VARCHAR(255) COMMENT "The partner name if the GL account can be connected to one",
-            To_be_consolidated BOOL COMMENT "If the GL account is part of the consolidation"
+            To_be_consolidated BOOL COMMENT "If the GL account is part of a consolidation",
+            Cash_or_bank BOOL DEFAULT 0 COMMENT "Whether the GL account is a cash/bank account",
+            Cash_flow_category VARCHAR(255) COMMENT "If the GL account is the counter account of a cash/bank transaction, then which cash-flow category it belongs to"
         ) COMMENT = "A table that creates a unique mapping for GL transaction tables";
     """
 
@@ -94,8 +96,9 @@ async def createMasterDataTable(config: configmodel.ConfigModel, table: model_ta
     res = await execute_sql.ExecuteSQLCommand(
         config=config,
         util=UTIL_NAME,
-        table=table_name,
-        sql_command=SQL_COMMAND
+        table_name=table_name,
+        sql_command=SQL_COMMAND,
+        sql_command_type="data_manipulation"
     )
 
     return res
